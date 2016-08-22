@@ -38,6 +38,32 @@ Make a Python 2.7 virtualenv, install `twisted==16.3.2`), and run `tracker.py
 --help`.
 
 
+### Example session
+
+```bash
+(venv) ckuehl@hydrogen:~/proj/docker-tracker$ ./tracker.py -p 8080 &
+Listening on port 8080...
+[1] 2938916
+(venv) ckuehl@hydrogen:~/proj/docker-tracker$ export DOCKER_HOST=localhost:8080
+(venv) ckuehl@hydrogen:~/proj/docker-tracker$ docker run -d debian:jessie bash -c 'while :; do true; done'
+bb7a1624199fa31025bf6548def02b0b225c7a78f3e7187b08541647181cfd70
+(venv) ckuehl@hydrogen:~/proj/docker-tracker$ docker run -d debian:jessie bash -c 'while :; do true; done'
+a903acb30fd0a153a584c5593609a5100e98845fa368bb4d77ce8c179b7fbe55
+(venv) ckuehl@hydrogen:~/proj/docker-tracker$ docker run -d debian:jessie bash -c 'while :; do true; done'
+e20a7dccf89b7e6f36023f4677e0d977e96071d1041651ddc676f98ad8bb024a
+(venv) ckuehl@hydrogen:~/proj/docker-tracker$ curl http://localhost:8080/tracker
+a903acb30fd0a153a584c5593609a5100e98845fa368bb4d77ce8c179b7fbe55
+bb7a1624199fa31025bf6548def02b0b225c7a78f3e7187b08541647181cfd70
+e20a7dccf89b7e6f36023f4677e0d977e96071d1041651ddc676f98ad8bb024a
+(venv) ckuehl@hydrogen:~/proj/docker-tracker$ curl http://localhost:8080/tracker | xargs -n1 docker kill
+a903acb30fd0a153a584c5593609a5100e98845fa368bb4d77ce8c179b7fbe55
+bb7a1624199fa31025bf6548def02b0b225c7a78f3e7187b08541647181cfd70
+e20a7dccf89b7e6f36023f4677e0d977e96071d1041651ddc676f98ad8bb024a
+(venv) ckuehl@hydrogen:~/proj/docker-tracker$ kill %1
+[1]  + done       ./tracker.py -p 8080
+```
+
+
 ### Limitations
 
 Currently this is not well-tested, but it seems to work reasonably well.
